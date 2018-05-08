@@ -1,0 +1,92 @@
+const int Pd_ENGR=6;       // Forward direction for Right engine  (OUT2) (Brown wire) (OUT2 is Green wire)
+const int Nd_ENGR=7;       // Backward direction for Left engine  (OUT1) (Gray wire)  (OUT1 is Blue wire)
+const int Pd_ENGL=9;       // Forward direction for Right engine  (OUT3) (Brown wire) (OUT3 is Blue wire)
+const int Nd_ENGL=8 ;      // Backward direction for Left engine  (OUT4) (Gray wire)  (OUT3 is Green wire)
+const int L_Sensor=4;      //Left sensor output                          (Orange wire)
+const int M_Sensor=3;      //Middel sensor output                        (Blue wire)
+const int R_Sensor=2;      //Right sensor output                         (White wire)
+const int FL_Sensor=5;     //Far left sensor output                      (Purpel wire)
+const int FL_Ground=12;    //Far left sensor ground                      (Brown wire)
+const int FL_Power=13;     //Far left sensor power                       (Orange wire)
+const int FR_Sensor=A3;    //Far right sensor output                     (Purpel wire)
+const int FR_Ground=A4;    //Far right sensor ground                     (Brown wire)
+const int FR_Power=A5;     //Far right sensor power                      (Orange wire)
+const int ENGR_Speed=11;   //Engine right speed                          (Green wire)
+const int ENGL_Speed=10;   //Engine left speed                           (Green wire)
+
+void setup() {
+  pinMode(Pd_ENGR,OUTPUT);
+  pinMode(Nd_ENGR,OUTPUT);
+  pinMode(Pd_ENGL,OUTPUT);
+  pinMode(Nd_ENGL,OUTPUT);
+  pinMode(L_Sensor,INPUT);
+  pinMode(M_Sensor,INPUT);
+  pinMode(R_Sensor,INPUT);
+  pinMode(FL_Sensor,INPUT);
+  pinMode(FR_Sensor,INPUT);
+  pinMode(FL_Ground,OUTPUT);
+  pinMode(FR_Ground,OUTPUT);
+  pinMode(FL_Power,OUTPUT);
+  pinMode(FR_Power,OUTPUT);
+  pinMode(ENGR_Speed,OUTPUT);
+  pinMode(ENGL_Speed,OUTPUT);
+  digitalWrite(FL_Power,HIGH);
+  digitalWrite(FL_Ground,LOW);
+  digitalWrite(FR_Power,HIGH);
+  digitalWrite(FR_Ground,LOW);
+}
+
+void Forward(){
+  digitalWrite(Pd_ENGR,HIGH);
+  digitalWrite(Nd_ENGR,LOW);
+  digitalWrite(Pd_ENGL,HIGH);    //For moving forward
+  digitalWrite(Nd_ENGL,LOW);
+  analogWrite(ENGR_Speed,80);
+  analogWrite(ENGL_Speed,80);
+ 
+}
+
+
+void right(){
+  digitalWrite(Pd_ENGR,LOW);
+  digitalWrite(Nd_ENGR,HIGH);
+  digitalWrite(Pd_ENGL,HIGH);    
+  digitalWrite(Nd_ENGL,LOW);
+  analogWrite(ENGR_Speed,70);
+  analogWrite(ENGL_Speed,80);
+}
+
+
+void left(){
+  digitalWrite(Pd_ENGR,HIGH);
+  digitalWrite(Nd_ENGR,LOW);
+  digitalWrite(Pd_ENGL,LOW);    //For moving left
+  digitalWrite(Nd_ENGL,HIGH);
+  analogWrite(ENGR_Speed,80);
+  analogWrite(ENGL_Speed,70);
+}
+
+
+void loop() {
+  int Left=digitalRead(L_Sensor);     //Left is the left sensor reading
+  int Middel=digitalRead(M_Sensor);   //Middel is the middel sensor reading
+  int Right=digitalRead(R_Sensor);    //Right is the right sensor reading
+
+  if(Left==LOW && Middel==LOW && Right==LOW ){
+    Forward();
+  }
+  
+  else if(Left==HIGH && Right==HIGH ){
+    Forward();
+  }
+
+  else if(Left==LOW && Right==HIGH ){
+    left();
+  }
+
+  else if(Left==HIGH && Right==LOW ){
+    right();
+  }
+
+}
+
