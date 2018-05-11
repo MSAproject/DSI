@@ -1,1 +1,36 @@
+#include <avr/io.h>
+#include <util/delay.h>
+void InitPWM()
+{
+	TCCR0|=(1<<WGM00)|(1<<WGM01)|(1<<COM01)|(1<<CS00);
+	DDRB|=(1<<PB3);
+}
+void SetPWMOutput(int duty)
+{
+	OCR0=duty;
+}
+void Wait()
+{
+	_delay_loop_2(3200);
+}
+void main()
+{
+	int speed=0;
+	InitPWM();
+	while(1)
+	{
+		//Now Loop with increasing speed
+		for(speed=0;speed<255;speed++)
+		{
+			SetPWMOutput(speed);
+			Wait();
+		}
+		//Now Loop with decreasing speed
+		for(speed=255;speed>0;speed--)
+		{
+			SetPWMOutput(speed);
+			Wait();
+		}
+	}
+}
 
